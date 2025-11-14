@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
-import CardNav from "@/components/CardNav";
+import CardNav, { CardNavItem } from "@/components/CardNav";
 
  const items: CardNavItem[] = [
     {

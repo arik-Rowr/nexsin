@@ -44,7 +44,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ onClose }) => {
               Get in Touch
             </h3>
             <p className="text-gray-300 mb-8 leading-relaxed">
-              We'd love to hear from you! Fill out the form or reach us through
+              We d love to hear from you! Fill out the form or reach us through
               the contact details below.
             </p>
 

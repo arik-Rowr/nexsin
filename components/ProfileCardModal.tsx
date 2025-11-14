@@ -31,30 +31,16 @@ const ProfileCardModal: React.FC<ProfileModalProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   
 
-  const [inputs, setInputs] = useState<ProfileState>({
-    avatarSrc,
+  const [inputs, setInputs] = useState({
+    
     fullName: "abhi yadav",
     nickName: "Alexa",
     gender: "Female",
     mobile: "9876543210",
   });
 
-<<<<<<< HEAD
- useEffect(() => {
-  if (!avatarSrc) return;
-  // Schedule update for next event loop tick
-  setTimeout(() => {
-=======
-  // animation trigger on mount
-  useEffect(() => {
-    setTimeout(() => setAnimate(true), 50);
-  }, []);
 
-  useEffect(() => {
->>>>>>> 64349cfc021e79102ca98471a460ca687c4cc332
-    setInputs((prev) => ({ ...prev, avatarSrc }));
-  }, 0);
-}, [avatarSrc]);
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -140,11 +126,7 @@ const ProfileCardModal: React.FC<ProfileModalProps> = ({
             onClick={handleAvatarClick}
           >
             <Image
-              src={
-                inputs.avatarSrc && inputs.avatarSrc.trim() !== ""
-                  ? inputs.avatarSrc
-                  : defaultAvatar
-              }
+              src={avatarSrc && avatarSrc.trim() !== "" ? avatarSrc : defaultAvatar}
               alt="Avatar"
               className="w-28 h-28 rounded-full object-cover border-2 border-[oklch(12.9%_0.042_264.695)] shadow-md bg-gray-700"
             />

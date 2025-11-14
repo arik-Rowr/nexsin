@@ -4,21 +4,36 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, X } from "lucide-react";
 
-export default function ChatAgent() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-  const chatEndRef = useRef(null);
+// --------------------------------------------
+// 🟢 Message Type
+// --------------------------------------------
+interface Message {
+  sender: "user" | "bot";
+  text: string;
+  options?: string[];
+}
 
-  // greet message
+export default function ChatAgent() {
+  // --------------------------------------------
+  // 🟢 States
+  // --------------------------------------------
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
+
+  // --------------------------------------------
+  // 🟢 Greeting Message (Runs Only When Opened First Time)
+  // --------------------------------------------
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      setTimeout(() => {
+      const timer1 = setTimeout(() => {
+        // First greet
         setMessages([
-          { sender: "bot", text: "👋 Hello Sir, I’m  your AI Assistant!" },
+          { sender: "bot", text: "👋 Hello Sir, I’m your AI Assistant!" },
         ]);
 
-        setTimeout(() => {
+        const timer2 = setTimeout(() => {
           setMessages((prev) => [
             ...prev,
             {
@@ -33,18 +48,26 @@ export default function ChatAgent() {
             },
           ]);
         }, 1000);
+
+        return () => clearTimeout(timer2);
       }, 400);
+
+      return () => clearTimeout(timer1);
     }
   }, [isOpen]);
 
-  // auto scroll
+  // --------------------------------------------
+  // 🟢 Auto-scroll to bottom on new message
+  // --------------------------------------------
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleOptionClick = (option) => {
-    const userMsg = { sender: "user", text: option };
-    setMessages((prev) => [...prev, userMsg]);
+  // --------------------------------------------
+  // 🟢 When user clicks a suggestion option
+  // --------------------------------------------
+  const handleOptionClick = (option: string) => {
+    setMessages((prev) => [...prev, { sender: "user", text: option }]);
 
     setTimeout(() => {
       setMessages((prev) => [
@@ -54,22 +77,30 @@ export default function ChatAgent() {
     }, 900);
   };
 
-  const handleSend = (e) => {
+  // --------------------------------------------
+  // 🟢 When user manually sends a message
+  // --------------------------------------------
+  const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMsg = { sender: "user", text: input };
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev) => [...prev, { sender: "user", text: input }]);
     setInput("");
 
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "Got it Sir! I’ll forward this to the team 🔥" },
+        {
+          sender: "bot",
+          text: "Got it Sir! I’ll forward this to the team 🔥",
+        },
       ]);
     }, 800);
   };
 
+  // --------------------------------------------
+  // 🟢 UI
+  // --------------------------------------------
   return (
     <>
       {/* Floating Robot Button */}
@@ -153,7 +184,10 @@ export default function ChatAgent() {
             </div>
 
             {/* Message Input */}
-            <form onSubmit={handleSend} className="p-3 flex gap-2 bg-[#0F172A] border-t border-gray-700">
+            <form
+              onSubmit={handleSend}
+              className="p-3 flex gap-2 bg-[#0F172A] border-t border-gray-700"
+            >
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
