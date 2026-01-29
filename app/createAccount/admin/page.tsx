@@ -1,4 +1,5 @@
-import { AdminDashboard } from "@/components/admin-dashboard"
+import { ProviderStatusView } from "@/components/ProviderStatusView"
+
 
 export const metadata = {
   title: "Admin Dashboard - Service Platform",
@@ -6,5 +7,5 @@ export const metadata = {
 }
 
 export default function AdminPage() {
-  return <AdminDashboard />
+  return <ProviderStatusView />
 }
