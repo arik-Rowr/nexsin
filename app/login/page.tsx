@@ -2,7 +2,8 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -16,36 +17,69 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Eye, EyeOff, Wrench, Mail, Lock } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Wrench,
+  Mail,
+  Lock,
+  Loader2,
+} from "lucide-react";
 import { GoogleIcon } from "./CustomIcons";
 import MuiButton from "@mui/material/Button";
 import { signInWithGoogle } from "@/lib/auth";
-import { fetchMe } from "@/lib/backend";
-import { useEffect } from "react";
+// import { login } from "@/lib/backend";
 
 export default function LoginPage() {
   const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
 
+  /* ================================
+     SUPABASE SESSION CHECK (GOOGLE)
+     ================================ */
   useEffect(() => {
-    fetchMe()
-      .then((data) => {
-        setUser(data);
-        router.push("/home");
-      })
-      .catch(() => {
-        // user not logged in yet → stay on login page
-      });
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        router.replace("/home");
+      }
+    };
+
+    checkSession();
   }, [router]);
 
-  const goToHomePage = () => {
-    router.push("/home");
+  /* ================================
+     EMAIL / PASSWORD LOGIN
+     ================================ */
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setIsSubmitting(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      // await login({ email, password });
+
+      setSuccess("Login successful");
+      router.replace("/home");
+    } catch {
+      setError("Invalid email or password");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -63,8 +97,8 @@ export default function LoginPage() {
 
       <section className="py-8 sm:py-12 lg:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-8 lg:gap-10 items-center">
-          {/* Left: Brand/Benefits - Hidden on mobile for better UX */}
-          <div className=" hidden lg:block">
+          {/* LEFT */}
+          <div className="hidden lg:block">
             <div className="bg-[#FFFFFF]/5 rounded-2xl shadow-md p-6 lg:p-8">
               <h1 className="text-3xl lg:text-4xl font-bold text-[#FFFFFF] mb-4">
                 Welcome back to <span className="text-[#007BFF]">Nexcyn</span>
@@ -73,83 +107,71 @@ export default function LoginPage() {
                 Sign in to manage your bookings, track service status, and view
                 your history.
               </p>
-              <ul className="space-y-3 text-[#343A40]">
-                <li className="text-[#FFFFFF] flex items-start gap-3">
-                  <span className=" mt-1 inline-block w-2.5 h-2.5 rounded-full bg-[#FFFFFF]"></span>
+              <ul className="space-y-3">
+                <li className="text-white flex items-start gap-3">
+                  <span className="mt-1 w-2.5 h-2.5 rounded-full bg-white" />
                   10,000+ happy customers
                 </li>
-                <li className="text-[#FFFFFF] flex items-start gap-3">
-                  <span className="mt-1 inline-block w-2.5 h-2.5 rounded-full bg-[#FFFFFF]"></span>
+                <li className="text-white flex items-start gap-3">
+                  <span className="mt-1 w-2.5 h-2.5 rounded-full bg-white" />
                   98% satisfaction rate
                 </li>
-                <li className="text-[#FFFFFF] flex items-start gap-3">
-                  <span className="mt-1 inline-block w-2.5 h-2.5 rounded-full bg-[#FFFFFF]"></span>
+                <li className="text-white flex items-start gap-3">
+                  <span className="mt-1 w-2.5 h-2.5 rounded-full bg-white" />
                   Same-day service in most areas
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Right: Login Card */}
+          {/* RIGHT */}
           <Card className="bg-[#FFFFFF]/5 border-0 shadow-xl max-w-md w-full mx-auto">
             <CardHeader className="space-y-1 p-4 sm:p-6">
-              <CardTitle className="text-xl sm:text-2xl text-white text-center lg:text-left">
+              <CardTitle className="text-xl sm:text-2xl text-white">
                 Sign in to your account
               </CardTitle>
-              <CardDescription className="text-white text-center lg:text-left text-sm sm:text-base">
+              <CardDescription className="text-white text-sm sm:text-base">
                 Enter your credentials to continue
               </CardDescription>
             </CardHeader>
+
             <CardContent className="p-4 sm:p-6">
-              <form className="space-y-4 sm:space-y-6" noValidate>
-                {/* Email */}
+              <form
+                className="space-y-4 sm:space-y-6"
+                noValidate
+                onSubmit={handleLogin}
+              >
+                {/* EMAIL */}
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="email"
-                    className="text-white text-sm sm:text-base"
-                  >
-                    Email
-                  </Label>
+                  <Label className="text-white">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6C757D]" />
                     <Input
-                      id="email"
                       type="email"
-                      placeholder="you@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="pl-9 h-11 sm:h-12 rounded-xl border-2 border-gray-200 focus:border-[#007BFF] text-sm sm:text-base"
+                      className="pl-9 h-11 sm:h-12 rounded-xl"
                       required
                     />
                   </div>
                 </div>
 
-                {/* Password */}
+                {/* PASSWORD */}
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="password"
-                    className="text-white text-sm sm:text-base"
-                  >
-                    Password
-                  </Label>
+                  <Label className="text-white">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6C757D]" />
                     <Input
-                      id="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="pl-9 pr-10 h-11 sm:h-12 rounded-xl border-2 border-gray-200 focus:border-[#007BFF] text-sm sm:text-base"
+                      className="pl-9 pr-10 h-11 sm:h-12 rounded-xl"
                       required
                     />
                     <button
                       type="button"
-                      aria-label={
-                        showPassword ? "Hide password" : "Show password"
-                      }
                       onClick={() => setShowPassword((s) => !s)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6C757D] hover:text-[#343A40] touch-manipulation"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6C757D]"
                     >
                       {showPassword ? (
                         <EyeOff className="h-5 w-5" />
@@ -160,48 +182,23 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Options */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
-                  <div className="flex items-center gap-2">
-                    <Checkbox id="remember" />
-                    <Label
-                      htmlFor="remember"
-                      className="text-white text-sm sm:text-base"
-                    >
-                      Remember me
-                    </Label>
-                  </div>
-                  <Link
-                    href="#"
-                    className="text-sm text-[#007BFF] hover:underline"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-
-                {/* Messages */}
-                {error && (
-                  <div className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg p-3">
-                    {error}
-                  </div>
-                )}
-                {success && (
-                  <div className="text-sm text-green-700 bg-green-50 border border-green-100 rounded-lg p-3">
-                    {success}
-                  </div>
-                )}
-
-                {/* Submit */}
+                {/* SUBMIT */}
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-11 sm:h-12 rounded-xl bg-[#007BFF] hover:bg-[#0067d6] text-sm sm:text-base font-medium"
-                  onClick={goToHomePage}
+                  className="w-full h-11 sm:h-12 rounded-xl bg-[#007BFF]"
                 >
-                  {isSubmitting ? "Signing in..." : "Sign In"}
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Signing in...
+                    </span>
+                  ) : (
+                    "Sign In"
+                  )}
                 </Button>
 
-                {/* Or divider */}
+                {/* DIVIDER */}
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t border-gray-200" />
@@ -211,16 +208,25 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Secondary actions */}
+                {/* GOOGLE */}
                 <MuiButton
                   fullWidth
                   variant="outlined"
-                  startIcon={<GoogleIcon />}
+                  disabled={isGoogleLoading}
+                  startIcon={
+                    isGoogleLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <GoogleIcon />
+                    )
+                  }
                   onClick={async () => {
                     try {
+                      setIsGoogleLoading(true);
                       await signInWithGoogle();
                     } catch {
                       setError("Google sign-in failed");
+                      setIsGoogleLoading(false);
                     }
                   }}
                   sx={{
@@ -234,34 +240,14 @@ export default function LoginPage() {
                     },
                   }}
                 >
-                  Sign in with Google
+                  {isGoogleLoading ? "Signing in..." : "Sign in with Google"}
                 </MuiButton>
-                <div className="text-xs sm:text-sm text-[#cbd5e1]"> </div>
+
                 <div className="text-xs sm:text-sm text-[#cbd5e1]">
-                  Don{"'"}t have an account?{" "}
-                  <Link
-                    href="/createAccount"
-                    className="text-[#007BFF] hover:underline"
-                  >
+                  Don&apos;t have an account?{" "}
+                  <Link href="/createAccount" className="text-[#007BFF]">
                     Create account
                   </Link>
-                </div>
-                <div className="text-center text-xs sm:text-sm text-[#6C757D] leading-relaxed">
-                  {" "}
-                </div>
-                <div className="text-center text-xs sm:text-sm text-[#6C757D] leading-relaxed">
-                  {" "}
-                </div>
-                <div className="text-center text-xs sm:text-sm text-[#6C757D] leading-relaxed">
-                  By continuing, you agree to our{" "}
-                  <Link href="#" className="text-[#007BFF] hover:underline">
-                    Terms
-                  </Link>{" "}
-                  and{" "}
-                  <Link href="#" className="text-[#007BFF] hover:underline">
-                    Privacy Policy
-                  </Link>
-                  .
                 </div>
               </form>
             </CardContent>

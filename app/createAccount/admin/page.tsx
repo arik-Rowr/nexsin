@@ -1,5 +1,4 @@
-import { ProviderStatusView } from "@/components/ProviderStatusView"
-
+import { ProviderStatusView } from "@/components/Provider-status-view"
 
 export const metadata = {
   title: "Admin Dashboard - Service Platform",
@@ -7,5 +6,5 @@ export const metadata = {
 }
 
 export default function AdminPage() {
-  return <ProviderStatusView />
+  return <ProviderStatusView providerId="" />
 }
