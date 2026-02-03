@@ -21,12 +21,6 @@ const ProfileCardModal: React.FC<ProfileModalProps> = ({
   const [animate, setAnimate] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [inputs, setInputs] = useState({
-    fullName: "abhi yadav",
-    nickName: "Alexa",
-    gender: "Female",
-    mobile: "9876543210",
-  });
 
   useEffect(() => {
     setTimeout(() => setAnimate(true), 50);
@@ -55,18 +49,6 @@ const ProfileCardModal: React.FC<ProfileModalProps> = ({
   };
 
   const handleEdit = () => setIsEditing(true);
-  const handleSave = () => setIsEditing(false);
-  const handleCancel = () => setIsEditing(false);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setInputs((prev) => ({ ...prev, [id]: value }));
-  };
-
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { id, value } = e.target;
-    setInputs((prev) => ({ ...prev, [id]: value }));
-  };
 
   return (
     <div

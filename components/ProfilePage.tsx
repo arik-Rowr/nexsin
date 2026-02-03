@@ -20,13 +20,13 @@ export default function ProfilePage({
   const [showEdit, setShowEdit] = useState(false);
 
   const [form, setForm] = useState({
-    fullName: "Abhi Yadav",
-    username: "abhi123",
-    email: "abhi@example.com",
-    phone: "9876543210",
-    address: "Your address here",
-    bio: "Write something about yourself...",
-    gender: "Male",
+    fullName: "",
+    username: "",
+    email: "",
+    phone: "",
+    address: "",
+    bio: "",
+    gender: "",
   });
 
   const handleChange = (

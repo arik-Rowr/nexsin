@@ -17,14 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Eye,
-  EyeOff,
-  Wrench,
-  Mail,
-  Lock,
-  Loader2,
-} from "lucide-react";
+import { Eye, EyeOff, Wrench, Mail, Lock, Loader2 } from "lucide-react";
 import { GoogleIcon } from "./CustomIcons";
 import MuiButton from "@mui/material/Button";
 import { signInWithGoogle } from "@/lib/auth";
@@ -43,26 +36,23 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  /* ================================
+  /* 
      SUPABASE SESSION CHECK (GOOGLE)
-     ================================ */
+  */
   useEffect(() => {
-    const checkSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
         router.replace("/home");
       }
-    };
+    });
 
-    checkSession();
+    return () => subscription.unsubscribe();
   }, [router]);
 
-  /* ================================
-     EMAIL / PASSWORD LOGIN
-     ================================ */
+  /* 
+     EMAIL / PASSWORD LOGIN*/
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 

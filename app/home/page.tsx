@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import UploadAvatars from "@/components/ui/UploadAvatars";
+import UploadAvatars from "@/components/ui/sliderAvtar";
 
 // ✅ Icon map
 const ICONS = {

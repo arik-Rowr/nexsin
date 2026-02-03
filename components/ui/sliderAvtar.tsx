@@ -6,8 +6,8 @@ import ButtonBase from "@mui/material/ButtonBase";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import ProfileCardModal from "@/components/ProfileCard";
 import ProfilePage from "../ProfilePage";
+import { supabase } from "@/lib/supabase";
 
 export default function UploadAvatars({
   avatarSrc,
@@ -23,8 +23,16 @@ export default function UploadAvatars({
 
   const handleClose = () => setOpen(false);
 
-  const logout = () => {
-    router.push("/login");
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (!error) {
+      alert("You have been logged out successfully ✅");
+      router.replace("/login");
+    } else {
+      alert("Logout failed ❌ Please try again");
+      console.error(error);
+    }
   };
 
   return (
@@ -127,16 +135,16 @@ export default function UploadAvatars({
 
                     <li
                       className="bg-red py-3 hover:bg-gray-800 cursor-pointer"
-                      onClick={logout}
+                      onClick={signOut}
                     >
-                      Logout
+                      SignOut
                     </li>
                   </ul>
                 </motion.div>
               </>
             )}
           </AnimatePresence>,
-          document.body
+          document.body,
         )}
 
       {/* Profile Modal */}
@@ -148,7 +156,7 @@ export default function UploadAvatars({
             setAvatarSrc={setAvatarSrc}
             onClose={() => setIsProfileModalOpen(false)}
           />,
-          document.body
+          document.body,
         )}
     </>
   );
