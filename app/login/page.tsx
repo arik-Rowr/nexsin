@@ -66,17 +66,14 @@ export default function LoginPage() {
 
   return (
     <main className="relative min-h-screen bg-[#0B1426] flex items-center justify-center px-4 overflow-hidden">
-
       {/* Background Glow */}
       <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-        <div className="w-[700px] h-[700px] bg-gradient-to-r from-blue-600/20  blur-3xl rounded-full" />
+        <div className="w-[700px] h-[700px] bg-gradient-to-r from-blue-600/20 blur-3xl rounded-full" />
       </div>
 
       <div className="relative max-w-6xl w-full grid lg:grid-cols-2 gap-12 items-center">
-
-        {/* LEFT SIDE - SERVICE CONTENT */}
-        <div className="hidden lg:flex flex-col justify-center space-4">
-
+        {/* LEFT SIDE */}
+        <div className="hidden lg:flex flex-col justify-center space-y-4">
           <div>
             <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight">
               Reliable Home Services <br />
@@ -91,41 +88,33 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Service Features */}
           <div className="space-y-4 text-gray-300">
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 mt-2 rounded-full bg-blue-500" />
               Verified service professionals
             </div>
-
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 mt-2 rounded-full bg-purple-500" />
               Real-time booking & tracking
             </div>
-
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 mt-2 rounded-full bg-indigo-500" />
               Secure & seamless experience
             </div>
           </div>
 
-          {/* Illustration */}
           <div className="relative pt-6">
-            <div className="absolute -inset-6  rounded-full" />
             <img
               src="/login-illustration.png"
               alt="Service Platform Illustration"
               className="relative w-[300px] xl:w-[500px] max-w-full opacity-95"
             />
           </div>
-
         </div>
 
-        {/* RIGHT SIDE - GLASS LOGIN CARD */}
+        {/* RIGHT SIDE */}
         <Card className="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-3xl w-full max-w-md mx-auto">
-
           <CardHeader className="space-y-6 p-6">
-
             {/* Toggle */}
             <div className="relative flex bg-[#0B1426] p-1 rounded-full overflow-hidden">
               <span
@@ -151,7 +140,6 @@ export default function LoginPage() {
               </button>
             </div>
 
-            {/* Header */}
             <div className="space-y-2">
               {activeTab === "pro" && (
                 <div className="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-blue-600/20 text-purple-400 border border-purple-500/30">
@@ -176,7 +164,6 @@ export default function LoginPage() {
 
           <CardContent className="p-6 pt-0">
             <form className="space-y-5" onSubmit={handleLogin}>
-
               {/* Email / Mobile */}
               <div className="space-y-2">
                 <Label className="text-gray-300">
@@ -218,6 +205,16 @@ export default function LoginPage() {
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
+              </div>
+
+              {/* 🔥 Forgot Password Link Added */}
+              <div className="flex justify-end -mt-2">
+                <Link
+                  href="/password/forget"
+                  className="text-xs text-blue-400 hover:text-blue-300 transition"
+                >
+                  Forgot Password?
+                </Link>
               </div>
 
               {error && (
@@ -270,30 +267,27 @@ export default function LoginPage() {
                   </>
                 )}
               </div>
-              
+
               {/* Legal Notice */}
-<p className="text-xs text-gray-500 text-center mt-6">
-  By continuing, you agree to our{" "}
-  <Link
-    href="/legal/terms"
-    className="text-blue-400 hover:underline"
-  >
-    Terms & Conditions
-  </Link>{" "}
-  and{" "}
-  <Link
-    href="/legal/privacy"
-    className="text-blue-400 hover:underline"
-  >
-    Privacy Policy
-  </Link>.
-</p>
-
-
+              <p className="text-xs text-gray-500 text-center mt-6">
+                By continuing, you agree to our{" "}
+                <Link
+                  href="/legal/terms"
+                  className="text-blue-400 hover:underline"
+                >
+                  Terms & Conditions
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="/legal/privacy"
+                  className="text-blue-400 hover:underline"
+                >
+                  Privacy Policy
+                </Link>.
+              </p>
             </form>
           </CardContent>
         </Card>
-
       </div>
     </main>
   );

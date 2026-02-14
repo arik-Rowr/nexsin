@@ -1,8 +1,6 @@
 "use client";
 
 import * as React from "react";
-import MuiAvatar from "@mui/material/Avatar";
-import ButtonBase from "@mui/material/ButtonBase";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
@@ -23,42 +21,33 @@ export default function UploadAvatars({
   const handleClose = () => setOpen(false);
 
   const logout = () => {
+    setOpen(false);
     router.push("/login");
   };
 
   return (
     <>
-      {/* Avatar button inside CardNav */}
-      <ButtonBase
+      {/* 🔥 HAMBURGER BUTTON */}
+      <div
         onClick={(e) => {
           e.stopPropagation();
           setOpen(true);
         }}
-        sx={{
-          borderRadius: "50%",
-          width: 48,
-          height: 48,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 0,
-        }}
+        className={`profile-hamburger ${open ? "open" : ""}`}
       >
-        <MuiAvatar
-          alt="User Avatar"
-          src={avatarSrc}
-          sx={{ width: 40, height: 40 }}
-        />
-      </ButtonBase>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
 
-      {/* Fullscreen slide-down via portal */}
+      {/* 🔥 FULLSCREEN SLIDE MENU */}
       {typeof window !== "undefined" &&
         createPortal(
           <AnimatePresence>
             {open && (
               <>
+                {/* Overlay */}
                 <motion.div
-                  key="overlay"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.5 }}
                   exit={{ opacity: 0 }}
@@ -67,8 +56,8 @@ export default function UploadAvatars({
                   onClick={handleClose}
                 />
 
+                {/* Slide Down Panel */}
                 <motion.div
-                  key="slide-menu"
                   initial={{ y: "-100%", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: "-100%", opacity: 0 }}
@@ -99,12 +88,12 @@ export default function UploadAvatars({
                     <li className="py-3 hover:bg-gray-800 cursor-pointer">
                       Update
                     </li>
+
                     <li
                       className="py-3 hover:bg-gray-800 cursor-pointer"
                       onClick={() => {
-                        router.push("/contactus");
-
                         setOpen(false);
+                        router.push("/contactus");
                       }}
                     >
                       Contact Us
@@ -113,21 +102,25 @@ export default function UploadAvatars({
                     <li className="py-3 hover:bg-gray-800 cursor-pointer">
                       Order Status
                     </li>
+
                     <li className="py-3 hover:bg-gray-800 cursor-pointer">
                       History
                     </li>
+
                     <li
                       className="py-3 hover:bg-gray-800 cursor-pointer"
                       onClick={() => {
                         setOpen(false);
-                        router.push("/serviceproviderauthentication/register");
+                        router.push(
+                          "/serviceproviderauthentication/register"
+                        );
                       }}
                     >
                       Register as professional
                     </li>
 
                     <li
-                      className="bg-red py-3 hover:bg-gray-800 cursor-pointer"
+                      className="py-3 text-red-400 hover:bg-gray-800 cursor-pointer"
                       onClick={logout}
                     >
                       Logout
@@ -140,7 +133,7 @@ export default function UploadAvatars({
           document.body
         )}
 
-      {/* Profile Modal */}
+      {/* 🔥 PROFILE MODAL */}
       {typeof window !== "undefined" &&
         isProfileModalOpen &&
         createPortal(
@@ -151,6 +144,39 @@ export default function UploadAvatars({
           />,
           document.body
         )}
+
+      {/* 🔥 HAMBURGER CSS */}
+      <style jsx>{`
+        .profile-hamburger {
+          width: 28px;
+          height: 20px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          cursor: pointer;
+        }
+
+        .profile-hamburger span {
+          height: 3px;
+          width: 100%;
+          background: white;
+          border-radius: 3px;
+          transition: 0.3s ease;
+        }
+
+        /* Animated X effect */
+        .profile-hamburger.open span:nth-child(1) {
+          transform: rotate(45deg) translateY(8px);
+        }
+
+        .profile-hamburger.open span:nth-child(2) {
+          opacity: 0;
+        }
+
+        .profile-hamburger.open span:nth-child(3) {
+          transform: rotate(-45deg) translateY(-8px);
+        }
+      `}</style>
     </>
   );
 }
