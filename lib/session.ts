@@ -10,4 +10,5 @@ export async function getAccessToken(): Promise<string> {
   }
 
   return session.access_token;
+  
 }

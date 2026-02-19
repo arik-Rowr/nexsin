@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, X, Maximize2, Minimize2 } from "lucide-react";
+import Image from "next/image";
 
 interface Message {
   sender: "user" | "bot";
@@ -81,7 +82,7 @@ export default function ChatAgent() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
-          <img
+          <Image
             src="/robot.png"
             alt="chat"
             className="w-20 h-20 drop-shadow-[0_0_12px_#00BFFF]"
