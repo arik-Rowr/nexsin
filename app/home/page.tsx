@@ -2,28 +2,8 @@
 
 import React, { useRef } from "react";
 import CardNav, { CardNavItem } from "@/components/CardNav";
-<<<<<<< HEAD
-import UploadAvatars from "@/components/ui/UploadAvatars";
-import { Hero } from "@/components/Hero";
-import { ServicesGrid } from "@/components/ServicesGrid";
-import { FinalCTA } from "@/components/finalCTA";
-=======
-import { Button } from "@/components/ui/button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import {
-  Car,
-  Droplets,
-  Hammer,
-  Laptop,
-  Paintbrush,
-  Snowflake,
-  Zap,
-} from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import UploadAvatars from "@/components/ui/sliderAvtar";
->>>>>>> 99ea0e30153461e0d29b63a677dab3105518dc61
+
+
 
 /* FOOTER ICONS */
 import {
@@ -35,6 +15,8 @@ import {
   Mail,
   MapPin,
 } from "lucide-react";
+import { ServicesGrid } from "@/components/ServicesGrid";
+import UploadAvatars from "@/components/ui/sliderAvtar";
 
 /* ---------------- NAV ITEMS ---------------- */
 const items: CardNavItem[] = [
@@ -69,15 +51,13 @@ const items: CardNavItem[] = [
 ];
 
 export default function HomePage() {
-  const [avatarSrc, setAvatarSrc] = React.useState("/defaultcharacter.png");
+
   const [searchQuery, setSearchQuery] = React.useState("");
 
   // 🔥 ref for scrolling
   const servicesRef = useRef<HTMLDivElement>(null);
 
-  const scrollToServices = () => {
-    servicesRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+
 
   return (
     <div
@@ -95,9 +75,6 @@ export default function HomePage() {
         buttonTextColor="#fff"
         showSearch
         onSearch={(query) => setSearchQuery(query)}
-        UploadAvatarComponent={
-          <UploadAvatars avatarSrc={avatarSrc} setAvatarSrc={setAvatarSrc} />
-        }
       />
 
      

@@ -1,12 +1,47 @@
-import UploadAvatars from "./ui/sliderAvtar";
-import { useState } from "react";
+"use client";
 
-export default function UploadWrapper() {
-  const [avatarSrc, setAvatarSrc] = useState<string>("");
+import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
+import ProfilePage from "@/components/ProfilePage";
 
+export default function UploadAvatars() {
+  const [open, setOpen] = React.useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = React.useState(false);
+  const router = useRouter();
+
+  const handleClose = () => setOpen(false);
+
+  const logout = () => {
+    setOpen(false);
+    router.push("/login");
+  };
+
+  // ✅ IMPORTANT: COMPONENT RETURNS JSX
   return (
-    <div className="flex justify-center items-center h-screen bg-[#0d1117]">
-      <UploadAvatars avatarSrc={avatarSrc} setAvatarSrc={setAvatarSrc} />
-    </div>
+    <>
+      <div
+        onClick={() => setOpen(true)}
+        className="text-white cursor-pointer"
+      >
+        Open Menu
+      </div>
+
+      {open &&
+        createPortal(
+          <div className="fixed inset-0 bg-black text-white">
+            <button onClick={handleClose}>Close</button>
+            <button onClick={logout}>Logout</button>
+          </div>,
+          document.body
+        )}
+
+      {isProfileModalOpen &&
+        createPortal(
+          <ProfilePage onClose={() => setIsProfileModalOpen(false)} />,
+          document.body
+        )}
+    </>
   );
 }
