@@ -1,4 +1,4 @@
-import UploadAvatars from "./ui/UploadAvatars";
+import UploadAvatars from "./ui/sliderAvtar";
 import { useState } from "react";
 
 export default function UploadWrapper() {

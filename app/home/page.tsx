@@ -2,10 +2,28 @@
 
 import React, { useRef } from "react";
 import CardNav, { CardNavItem } from "@/components/CardNav";
+<<<<<<< HEAD
 import UploadAvatars from "@/components/ui/UploadAvatars";
 import { Hero } from "@/components/Hero";
 import { ServicesGrid } from "@/components/ServicesGrid";
 import { FinalCTA } from "@/components/finalCTA";
+=======
+import { Button } from "@/components/ui/button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import {
+  Car,
+  Droplets,
+  Hammer,
+  Laptop,
+  Paintbrush,
+  Snowflake,
+  Zap,
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import UploadAvatars from "@/components/ui/sliderAvtar";
+>>>>>>> main
 
 /* FOOTER ICONS */
 import {
