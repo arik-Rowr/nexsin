@@ -1,10 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+
+
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import ProfilePage from "@/components/ProfilePage";
+
+
+
 
 export default function UploadAvatars() {
   const [open, setOpen] = React.useState(false);

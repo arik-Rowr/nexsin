@@ -3,6 +3,10 @@
 import React, { useRef } from "react";
 import CardNav, { CardNavItem } from "@/components/CardNav";
 
+import { ServicesGrid } from "@/components/ServicesGrid";
+
+
+
 
 
 /* FOOTER ICONS */
@@ -15,8 +19,8 @@ import {
   Mail,
   MapPin,
 } from "lucide-react";
-import { ServicesGrid } from "@/components/ServicesGrid";
-import UploadAvatars from "@/components/ui/sliderAvtar";
+
+
 
 /* ---------------- NAV ITEMS ---------------- */
 const items: CardNavItem[] = [
