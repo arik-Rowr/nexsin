@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-<<<<<<< HEAD
+
 import {
   Eye,
   EyeOff,
@@ -25,14 +25,7 @@ import {
   ShieldCheck,
   Phone,
 } from "lucide-react";
-=======
-import { Checkbox } from "@/components/ui/checkbox";
-import { Eye, EyeOff, Wrench, Mail, Lock, Loader2 } from "lucide-react";
-import { GoogleIcon } from "./CustomIcons";
->>>>>>> 99ea0e30153461e0d29b63a677dab3105518dc61
-import MuiButton from "@mui/material/Button";
-import { GoogleIcon } from "./CustomIcons";
-import { signInWithGoogle } from "@/lib/auth";
+
 
 export default function LoginPage() {
   const router = useRouter();
@@ -42,10 +35,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+ 
   const [error, setError] = useState<string | null>(null);
 
-<<<<<<< HEAD
+
   useEffect(() => {
     const checkSession = async () => {
       const {
@@ -56,7 +49,7 @@ export default function LoginPage() {
     checkSession();
   }, [router]);
 
-=======
+
   /* 
      SUPABASE SESSION CHECK (GOOGLE)
   */
@@ -74,7 +67,7 @@ export default function LoginPage() {
 
   /* 
      EMAIL / PASSWORD LOGIN*/
->>>>>>> 99ea0e30153461e0d29b63a677dab3105518dc61
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);

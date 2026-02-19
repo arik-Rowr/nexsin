@@ -4,12 +4,8 @@ import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-<<<<<<< HEAD:components/ui/UploadAvatars.tsx
 import ProfilePage from "@/components/ProfilePage";
-=======
-import ProfilePage from "../ProfilePage";
 import { supabase } from "@/lib/supabase";
->>>>>>> 99ea0e30153461e0d29b63a677dab3105518dc61:components/ui/sliderAvtar.tsx
 
 export default function UploadAvatars({
   avatarSrc,
@@ -25,11 +21,10 @@ export default function UploadAvatars({
 
   const handleClose = () => setOpen(false);
 
-<<<<<<< HEAD:components/ui/UploadAvatars.tsx
   const logout = () => {
     setOpen(false);
     router.push("/login");
-=======
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
 
@@ -40,7 +35,7 @@ export default function UploadAvatars({
       alert("Logout failed ❌ Please try again");
       console.error(error);
     }
->>>>>>> 99ea0e30153461e0d29b63a677dab3105518dc61:components/ui/sliderAvtar.tsx
+
   };
 
   return (
@@ -138,13 +133,12 @@ export default function UploadAvatars({
                     </li>
 
                     <li
-<<<<<<< HEAD:components/ui/UploadAvatars.tsx
+
                       className="py-3 text-red-400 hover:bg-gray-800 cursor-pointer"
                       onClick={logout}
-=======
-                      className="bg-red py-3 hover:bg-gray-800 cursor-pointer"
-                      onClick={signOut}
->>>>>>> 99ea0e30153461e0d29b63a677dab3105518dc61:components/ui/sliderAvtar.tsx
+
+                   
+
                     >
                       SignOut
                     </li>
@@ -202,4 +196,5 @@ export default function UploadAvatars({
       `}</style>
     </>
   );
+}
 }
