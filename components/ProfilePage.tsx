@@ -4,8 +4,6 @@ import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu } from "lucide-react";
 
-
-
 export default function ProfilePage({
   onClose,
 }: {
@@ -31,20 +29,11 @@ export default function ProfilePage({
     setForm({ ...form, [e.target.id]: e.target.value });
   };
 
-<<<<<<< HEAD
+
+
 
   const handleAvatarRemove = () => {
 
-=======
-  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-
-    }
-  };
-
-  const handleAvatarRemove = () => {
->>>>>>> 214d127 (resolving the latest code)
   };
 
   return (
@@ -91,11 +80,11 @@ export default function ProfilePage({
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.4 }}
           >
-<<<<<<< HEAD
-=======
+
+
             {/* this is the menu icno */}
             <Menu/>          
->>>>>>> 214d127 (resolving the latest code)
+
           </motion.div>
 
           <div className="flex gap-4 mt-5">
