@@ -279,7 +279,7 @@ export default function LoginPage() {
                   <>
                     Want to join as a professional?{" "}
                     <Link
-                      href="/serviceproviderauthentication/register"
+                      href="/provider/register"
                       className="text-purple-400 hover:underline"
                     >
                       Register as Service Provider

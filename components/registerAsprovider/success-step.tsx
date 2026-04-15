@@ -37,11 +37,11 @@ export function SuccessStep({ applicationId }: SuccessStepProps) {
               strokeLinejoin="round"
               strokeWidth={2}
               d="M5 13l4 4L19 7"
-            />
+            />     
           </svg>
-        </div>
+        </div> 
 
-        {/* Message */}
+        {/* Message the  you can see message*/}
         <h1 className="mb-3 text-3xl font-bold text-gray-900">
           🎉 Your account has been created successfully!
         </h1>

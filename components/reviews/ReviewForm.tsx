@@ -19,6 +19,8 @@ interface ReviewFormData {
   review: string;
 }
 
+const API = process.env.NEXT_PUBLIC_BACKEND_URL
+
 export default function ReviewForm() {
   const [formData, setFormData] = useState<ReviewFormData>({
     name: "",
@@ -31,7 +33,6 @@ export default function ReviewForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorState>({ type: null, message: "" });
   const [success, setSuccess] = useState(false);
-  const api = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -66,7 +67,7 @@ export default function ReviewForm() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${api}/api/reviews/`, {
+      const res = await fetch(`${API}/api/reviews/post`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

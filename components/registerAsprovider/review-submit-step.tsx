@@ -1,14 +1,22 @@
 "use client";
 
+import type React from "react";
+import { useState } from "react";
 import type {
   PersonalDetails,
   ServiceDetails,
   Documents,
   BankDetails,
 } from "@/types/provider";
-
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  CheckCircle,
+  User,
+  Briefcase,
+  FileText,
+} from "lucide-react";
 
 interface ReviewSubmitStepProps {
   personalDetails: PersonalDetails;
@@ -24,7 +32,6 @@ export function ReviewSubmitStep({
   personalDetails,
   serviceDetails,
   documents,
-  bankDetails,
   gstNumber,
   onBack,
   onSubmit,
@@ -36,122 +43,177 @@ export function ReviewSubmitStep({
 
     setIsSubmitting(true);
 
-    // Generate application ID with strong randomness
     const timestamp = Date.now();
     const randomBytes = crypto.getRandomValues(new Uint8Array(6));
     const randomSuffix = Array.from(randomBytes)
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("")
       .toUpperCase();
+
     const applicationId = `APP-${timestamp}-${randomSuffix}`;
 
-    // Simulate API call delay (remove in real implementation)
     setTimeout(() => {
       onSubmit(applicationId);
       setIsSubmitting(false);
-    }, 800);
+    }, 900);
+  };
+
+  const getProviderDisplayName = () => {
+    if (serviceDetails.providerType === "business") {
+      return serviceDetails.shopName || "Not Provided";
+    }
+    return (
+      serviceDetails.displayName || serviceDetails.ownerName || "Not Provided"
+    );
   };
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900">Review & Submit</h2>
-        <p className="mt-1 text-sm text-gray-600">
-          Please review your information before submitting your application
+    <div className="space-y-10 max-w-4xl mx-auto">
+      <div className="text-center">
+        <h2 className="text-3xl font-semibold tracking-tight text-gray-900">
+          Review Your Application
+        </h2>
+        <p className="mt-3 text-gray-600">
+          Please carefully review all details before submitting
         </p>
       </div>
 
-      {/* PERSONAL DETAILS */}
-      <Section title="Personal Details">
-        <InfoGrid>
-          <InfoItem label="Full Name" value={personalDetails.name || "Not Provided"} />
-          <InfoItem label="Email" value={personalDetails.email || "Not Provided"} />
-        </InfoGrid>
-      </Section>
+      {/* Personal Details */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <User className="w-5 h-5 text-blue-600" />
+            <CardTitle>Personal Information</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="grid md:grid-cols-2 gap-6">
+          <InfoItem label="Full Name" value={personalDetails.name} />
+          <InfoItem label="Email Address" value={personalDetails.email} />
+        </CardContent>
+      </Card>
 
-      {/* SERVICE DETAILS */}
-      <Section title="Service Details">
-        <InfoGrid>
-          <InfoItem label="Shop Name" value={serviceDetails.shopName || "Not Provided"} />
-          <InfoItem label="Owner Name" value={serviceDetails.ownerName || "Not Provided"} />
-          <InfoItem label="Start Year" value={serviceDetails.startYear || "Not Provided"} />
-          <InfoItem
-            label="Service Range"
-            value={
-              serviceDetails.serviceRange
-                ? `${serviceDetails.serviceRange} KM`
-                : "Not Provided"
-            }
-          />
-
-          <InfoItem
-            label="Categories"
-            value={
-              serviceDetails.category?.length
-                ? serviceDetails.category.join(", ")
-                : "Not Selected"
-            }
-            className="md:col-span-2"
-          />
-
-          {serviceDetails.customCategory?.length ? (
+      {/* Service Details */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <Briefcase className="w-5 h-5 text-indigo-600" />
+            <CardTitle>Service Details</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
             <InfoItem
-              label="Custom Categories"
-              value={serviceDetails.customCategory.join(", ")}
-              className="md:col-span-2"
+              label="Provider Type"
+              value={
+                serviceDetails.providerType === "business"
+                  ? "Business / Shop"
+                  : "Individual"
+              }
             />
-          ) : null}
-        </InfoGrid>
-      </Section>
+            <InfoItem label="Display Name" value={getProviderDisplayName()} />
+            <InfoItem label="Owner Name" value={serviceDetails.ownerName} />
+            <InfoItem label="Year Started" value={serviceDetails.startYear} />
+            <InfoItem
+              label="Service Range"
+              value={`${serviceDetails.serviceRange} KM`}
+            />
+          </div>
 
-      {/* GST DETAILS */}
-      <Section title="GST Details">
-        <InfoGrid>
-          <InfoItem label="GST Number" value={gstNumber || "Not Provided"} />
-        </InfoGrid>
-      </Section>
+          <div>
+            <p className="text-sm font-medium text-gray-500 mb-2">
+              Service Categories
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {serviceDetails.category?.map((cat) => (
+                <Badge key={cat} variant="secondary" className="capitalize">
+                  {cat}
+                </Badge>
+              ))}
+            </div>
+          </div>
 
-      {/* BANK DETAILS */}
-      <Section title="Bank Details">
-        <InfoGrid>
-          <InfoItem
-            label="Account Holder"
-            value={bankDetails.accountHolderName || "Not Provided"}
-          />
-          <InfoItem
-            label="Account Number"
-            value={
-              bankDetails.accountNumber
-                ? maskAccountNumber(bankDetails.accountNumber)
-                : "Not Provided"
-            }
-          />
-          <InfoItem label="IFSC Code" value={bankDetails.ifscCode || "Not Provided"} />
-          <InfoItem label="Bank Name" value={bankDetails.bankName || "Not Provided"} />
-        </InfoGrid>
-      </Section>
+          {serviceDetails.customCategory?.length > 0 && (
+            <div>
+              <p className="text-sm font-medium text-gray-500 mb-2">
+                Custom Services
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {serviceDetails.customCategory.map((item, i) => (
+                  <Badge key={i} variant="outline">
+                    {item}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
-      {/* DOCUMENTS */}
-      <Section title="Documents Uploaded">
-        <ul className="space-y-3 text-sm">
-          <DocumentItem label="Owner Face Photo" file={documents.profilePhoto} />
-          <DocumentItem label="Aadhaar Card" file={documents.aadhaarFront} />
-          <DocumentItem label="PAN Card" file={documents.panCard} />
-        </ul>
-      </Section>
+      {/* Documents */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <FileText className="w-5 h-5 text-emerald-600" />
+            <CardTitle>Documents Uploaded</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 gap-4">
+            <DocumentItem label="Profile Photo" file={documents.profilePhoto} />
+            <DocumentItem
+              label={`${(documents.docType1 || "Aadhaar").toUpperCase()} (Front)`}
+              file={documents.doc1Front}
+            />
+            <DocumentItem
+              label={`${(documents.docType2 || "PAN").toUpperCase()} (Front)`}
+              file={documents.doc2Front}
+            />
+          </div>
+        </CardContent>
+        <p className="text-center text-xs text-gray-500">
+          By submitting, you confirm that all information provided is accurate
+          and true.
+        </p>
+      </Card>
 
-      <div className="flex justify-between pt-6 border-t">
+      {/* GST */}
+      {gstNumber && (
+        <Card>
+          <CardHeader>
+            <CardTitle>GST Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <InfoItem label="GST Number" value={gstNumber} />
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Final Action */}
+      <div className="flex justify-between pt-8 border-t">
         <Button
           type="button"
           onClick={onBack}
           variant="outline"
+          size="lg"
           disabled={isSubmitting}
         >
           Back
         </Button>
 
-        <Button onClick={handleSubmit} disabled={isSubmitting}>
-          {isSubmitting ? "Submitting Application..." : "Submit Application"}
+        <Button
+          onClick={handleSubmit}
+          size="lg"
+          disabled={isSubmitting}
+          className="min-w-48"
+        >
+          {isSubmitting ? (
+            "Submitting Application..."
+          ) : (
+            <>
+              <CheckCircle className="mr-2 h-5 w-5" />
+              Submit Application
+            </>
+          )}
         </Button>
       </div>
     </div>
@@ -160,55 +222,43 @@ export function ReviewSubmitStep({
 
 /* ====================== HELPER COMPONENTS ====================== */
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h3 className="mb-5 text-lg font-semibold text-gray-900">{title}</h3>
-      {children}
-    </div>
-  );
-}
-
-function InfoGrid({ children }: { children: React.ReactNode }) {
-  return <dl className="grid gap-x-6 gap-y-5 md:grid-cols-2">{children}</dl>;
-}
-
 function InfoItem({
   label,
   value,
   className = "",
 }: {
   label: string;
-  value: string;
+  value: string | number | undefined;
   className?: string;
 }) {
   return (
     <div className={className}>
-      <dt className="text-sm font-medium text-gray-500">{label}</dt>
-      <dd className="mt-1.5 text-sm font-medium text-gray-900 break-all">
-        {value}
-      </dd>
+      <p className="text-sm text-gray-500 font-medium">{label}</p>
+      <p className="mt-1 text-base font-semibold text-gray-900 break-all">
+        {value || "Not Provided"}
+      </p>
     </div>
   );
 }
 
-function DocumentItem({ label, file }: { label: string; file: File | null | undefined }) {
-  const fileName = file?.name || "Not Uploaded";
-
+function DocumentItem({
+  label,
+  file,
+}: {
+  label: string;
+  file: File | null | undefined;
+}) {
   return (
-    <li className="flex items-center gap-3 rounded-lg bg-gray-50 px-4 py-3">
-      <span className="text-green-600 text-xl">✓</span>
-      <div>
-        <span className="font-medium text-gray-700">{label}</span>
-        <p className="text-sm text-gray-600 mt-0.5">{fileName}</p>
+    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4 border border-gray-100">
+      <div className="text-green-600">
+        <CheckCircle className="w-5 h-5" />
       </div>
-    </li>
+      <div>
+        <p className="font-medium text-gray-800">{label}</p>
+        <p className="text-sm text-gray-600 truncate max-w-[260px]">
+          {file?.name || "Not Uploaded"}
+        </p>
+      </div>
+    </div>
   );
 }
-
-function maskAccountNumber(accountNumber: string): string {
-  if (!accountNumber || accountNumber.length < 4) return "••••";
-  const lastFour = accountNumber.slice(-4);
-  return `••••••••${lastFour}`;
-}
-

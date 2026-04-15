@@ -1,6 +1,6 @@
 {
-  "name": "FixMate - On-Demand Home Services",
-  "short_name": "FixMate",
+  "name": "Nexcyn - On-Demand Home Services",
+  "short_name": "Nexcyn",
   "description": "Book trusted local professionals for all your repair and maintenance needs",
   "start_url": "/",
   "display": "standalone",
@@ -9,12 +9,12 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/nexcyn.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/nexcyn.png",
       "sizes": "512x512",
       "type": "image/png"
     }

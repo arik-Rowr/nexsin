@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+
+const API = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -14,7 +17,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [agree, setAgree] = useState(false);
 
-  const sendOtp = () => {
+  const sendOtp = async () => {
     if (!agree) {
       alert("Please agree to Terms & Conditions");
       return;
@@ -25,46 +28,87 @@ export default function RegisterPage() {
       return;
     }
 
-    setStep("otp");
+    try {
+      setLoading(true);
+
+      const res = await fetch(
+        `${API}/api/provider/sendotp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ phone }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error);
+
+      setStep("otp");
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const verifyOtp = () => {
+  const verifyOtp = async () => {
     if (otp.length !== 6) {
       alert("Enter valid OTP");
       return;
     }
 
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
+      const res = await fetch(
+        `${API}/api/provider/verifyotp`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone,
+            otp,
+          }),
+        },
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error);
+
       setStep("success");
 
       setTimeout(() => {
-        router.push("/serviceproviderauthentication/registerservice");
-      }, 2000);
-    }, 1200);
+        router.push("/provider/registerservice");
+      }, 1500);
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-[#0a1a33] flex flex-col">
-
       <div className="flex-1 px-6 py-20">
         <div className="w-full max-w-6xl mx-auto">
-
           {/* TOP INFO */}
           <div className="text-center mb-16">
             <h1 className="text-4xl font-bold text-white mb-4">
               Earn More. Earn Respect. Safety Ensured.
             </h1>
             <p className="text-blue-200 max-w-2xl mx-auto">
-              Join verified service professionals across India and grow your income
-              with trust, safety, and transparent payments.
+              Join verified service professionals across India and grow your
+              income with trust, safety, and transparent payments.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 items-center gap-16">
-
             {/* LEFT CARD */}
             <div>
               <div
@@ -74,7 +118,6 @@ export default function RegisterPage() {
                   borderBottomRightRadius: "120px",
                 }}
               >
-
                 {/* PHONE STEP */}
                 {step === "phone" && (
                   <>
@@ -209,19 +252,20 @@ export default function RegisterPage() {
                     </p>
                   </div>
                 )}
-
               </div>
             </div>
 
             {/* RIGHT IMAGE */}
             <div className="hidden md:flex justify-center">
-              <img
+              <Image
                 src="/illustrations/image.png"
+                width={100}
+                height={100}
                 alt="Service Professional"
                 className="w-[420px] max-w-full"
+                loading="eager"
               />
             </div>
-
           </div>
         </div>
       </div>

@@ -33,7 +33,7 @@ const fetchReviews = useCallback(async () => {
     setLoading(true);
     setError(null);
 
-    const res = await fetch(`${API}/api/reviews`, {
+    const res = await fetch(`${API}/api/reviews/get`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
